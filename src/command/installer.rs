@@ -5,7 +5,8 @@ use log::info;
 use crate::{
     cli::Args,
     command::install_utils::{
-        add_to_start_menu, download_release, extract_release, fetch_info, verify_release,
+        add_self_to_install_dir, add_to_start_menu, close_existing_sessions, download_release,
+        extract_release, fetch_info, launch_app, verify_release,
     },
     config,
 };
@@ -71,6 +72,8 @@ where
     set_text("Verified!");
     tokio::time::sleep(Duration::from_millis(1000)).await;
 
+    close_existing_sessions().await;
+
     set_text("Extracting...");
     let result = match extract_release(download, &set_text).await {
         Ok(result) => result,
@@ -79,11 +82,26 @@ where
         }
     };
 
-    add_to_start_menu(result).await;
+    match add_self_to_install_dir(&result).await {
+        Ok(_) => (),
+        Err(_) => {
+            set_text("Failed to add installer to app directory");
+            return false;
+        }
+    }
+
+    add_to_start_menu(&result).await;
+
+    match launch_app(&result) {
+        Ok(_) => (),
+        Err(_) => {
+            set_text("Failed to launch!");
+            return false;
+        }
+    }
 
     set_text("Done!");
-
-    tokio::time::sleep(Duration::from_millis(3000)).await;
+    tokio::time::sleep(Duration::from_millis(1000)).await;
 
     info!("Install Successful!");
 

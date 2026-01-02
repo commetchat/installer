@@ -24,6 +24,7 @@ clap = { version = "4.5.53", features = ["derive"] }
 rfd = "0.16.0"
 rand = "0.8.5"
 shortcuts-rs = "1.1.1"
+sysinfo = "0.37.2"
 
 [build-dependencies]
 winresource = "0.1"
