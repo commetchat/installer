@@ -164,6 +164,10 @@ pub async fn close_existing_sessions() {
     let result = AppDirs::new(Some(config::APP_ID), false).unwrap();
     let dir = result.data_dir.to_str().unwrap();
 
+    if !dir.contains(config::APP_ID) {
+        return;
+    }
+
     let s = System::new_all();
     let processes = s.processes();
     let current_pid = get_current_pid().unwrap();
