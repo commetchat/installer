@@ -24,6 +24,7 @@
 The installer uses an embedded webview for the UI. This page is written in vanilla HTML + JS, but needs to be bundled with webpack to a single file, so it can be easily embedded in the executable.
 
 ```
+cd ui
 npm i
 npm run build
 ```
