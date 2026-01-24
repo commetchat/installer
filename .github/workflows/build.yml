@@ -1,0 +1,29 @@
+
+name: build
+
+on:
+  pull_request:
+  merge_group:
+
+jobs:
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Build UI
+        run: |
+          cd .\ui
+          npm i 
+          npm run build
+
+      - name: Build Installer
+        run: |
+          cargo build

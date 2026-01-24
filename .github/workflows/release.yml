@@ -1,0 +1,42 @@
+
+name: release
+
+on:
+  release:
+    types:
+      - created
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Build UI
+        run: |
+          cd .\ui
+          npm i 
+          npm run build
+
+      - name: Build Installer
+        run: |
+          cargo build --release
+
+      - name: Upload to release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: .\target\release\installer.exe
+          asset_name: commet-installer.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
