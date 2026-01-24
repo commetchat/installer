@@ -37,6 +37,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: .\target\release\build\installer.exe
+          asset_path: .\target\release\installer.exe
           asset_name: commet-installer.exe
           asset_content_type: application/vnd.microsoft.portable-executable
