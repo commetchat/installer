@@ -15,6 +15,7 @@
     .center {
         margin-left: auto;
         margin-right: auto;
+        text-align: center;
     }
 
     .noselect {
@@ -23,6 +24,20 @@
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
+    }
+
+    .button {
+        background-color: #534cdd;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
     }
 </style>
 
@@ -43,11 +58,17 @@
                         fill="#ffffff" />
                 </svg>
             </div>
+
+        </div>
+
+        <div style="position: relative;" id="install_button">
+            <div class="center">
+                <a href="#" onclick="start()" class="button">${BUTTON_PROMPT}</a>
+            </div>
         </div>
 
         <div class="background center noselect" id="text"
             style="color: gray; font-size: x-small; font-family: Arial, Helvetica, sans-serif; text-align: center;">
-
         </div>
 
 

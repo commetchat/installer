@@ -31,9 +31,21 @@ fn main() {
         }
     };
 
+    log::info!("{:?}", args);
+
+    let content = include_str!("../ui/dist/index.html");
+
+    let mut prompt = "Install Commet";
+
+    if args.command == "update" {
+        prompt = "Update Commet";
+    }
+
+    let content = content.replace("${BUTTON_PROMPT}", prompt);
+
     web_view::builder()
         .title(WINDOW_TITLE)
-        .content(Content::Html(include_str!("../ui/dist/index.html")))
+        .content(Content::Html(content))
         .size(250, 250)
         .frameless(true)
         .resizable(false)
@@ -69,6 +81,7 @@ fn main() {
                     rt.block_on(async {
                         let result = match args.command.as_str() {
                             "install" => command::installer::install(args, set_text).await,
+                            "update" => command::installer::install(args, set_text).await,
                             _ => {
                                 set_text("Unknown Command");
                                 false
