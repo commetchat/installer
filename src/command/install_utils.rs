@@ -287,6 +287,10 @@ where
 async fn move_from_temp(temp: &str, dir: &str) -> Result<(), io::Error> {
     let entries = std::fs::read_dir(temp)?;
 
+    if !std::fs::exists(dir)? {
+        std::fs::create_dir_all(dir)?
+    }
+
     let entries: Vec<DirEntry> = entries.map(|res| res.unwrap()).collect();
     for entry in entries.iter() {
         info!("Moving\t: {}", entry.path().to_str().unwrap());

@@ -49,7 +49,7 @@ fn main() {
         .size(250, 250)
         .frameless(true)
         .resizable(false)
-        .debug(true)
+        .debug(false)
         .user_data(())
         .invoke_handler(|webview, arg| {
             let handle = webview.handle();
