@@ -6,7 +6,7 @@ use crate::{
     cli::Args,
     command::install_utils::{
         add_self_to_install_dir, add_to_start_menu, close_existing_sessions, download_release,
-        extract_release, fetch_info, launch_app, verify_release,
+        extract_release, fetch_info, launch_app, verify_release, ReleaseInfo,
     },
     config,
 };
@@ -19,22 +19,35 @@ where
 
     set_text("Fetching releases...");
 
-    let info = fetch_info(
-        config::REPO_OWNER,
-        config::REPO,
-        config::WINDOWS_BINARY_NAME,
-        config::WINDOWS_SIGNATURE_NAME,
-        args.prerelease,
-    )
-    .await;
+    let mut info: Option<ReleaseInfo> = None;
 
-    let info = match info {
-        Ok(info) => info,
-        Err(_) => {
-            set_text("Failed to fetch release info");
-            return false;
-        }
-    };
+    let mut count = 0;
+    loop {
+        let result = fetch_info(
+            config::REPO_OWNER,
+            config::REPO,
+            config::WINDOWS_BINARY_NAME,
+            config::WINDOWS_SIGNATURE_NAME,
+            args.prerelease,
+        )
+        .await;
+
+        match result {
+            Ok(i) => match i {
+                Some(i) => {
+                    info = Some(i);
+                    break;
+                }
+                None => (),
+            },
+            Err(_) => (),
+        };
+
+        tokio::time::sleep(Duration::from_secs(8)).await;
+
+        count += 1;
+        set_text(format!("Retrying: {}", count).as_str());
+    }
 
     let info = match info {
         Some(info) => info,
