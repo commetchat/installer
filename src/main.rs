@@ -17,10 +17,14 @@ use web_view::*;
 use crate::{cli::Args, config::WINDOW_TITLE};
 
 fn main() {
-    SimpleLogger::new()
-        .with_level(log::LevelFilter::Info)
-        .init()
-        .unwrap();
+    // On windows, disable logs during update in release mode
+    #[cfg(not(debug_assertions))]
+    let level = log::LevelFilter::Off;
+
+    #[cfg(debug_assertions)]
+    let level = log::LevelFilter::Info;
+
+    SimpleLogger::new().with_level(level).init().unwrap();
 
     let args = Args::try_parse();
     let args = match args {
