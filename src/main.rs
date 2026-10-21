@@ -45,6 +45,11 @@ fn main() {
         prompt = "Update Commet";
     }
 
+    if args.command == "verify" {
+        command::verify::verify(args, |s| info!("{}", s));
+        return;
+    }
+
     let content = content.replace("${BUTTON_PROMPT}", prompt);
 
     web_view::builder()
