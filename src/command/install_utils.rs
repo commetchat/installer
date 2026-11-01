@@ -38,6 +38,7 @@ pub async fn fetch_info(
         .per_page(100)
         .send()
         .await?;
+
     for release in releases.items.iter() {
         if use_prereleases == false && release.prerelease {
             continue;
@@ -137,6 +138,11 @@ pub fn verify_release(download: &ReleaseDownload) -> bool {
             return false;
         }
     };
+
+    info!(
+        "Public key: {:#?}",
+        public_key.details.users.first().unwrap().id
+    );
 
     let (signature, _headers) =
         match DetachedSignature::from_armor_single(Cursor::new(download.signature.clone())) {

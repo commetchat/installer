@@ -11,4 +11,7 @@ pub struct Args {
 
     #[arg(short, long, default_value_t = false)]
     pub prerelease: bool,
+
+    #[arg(short, long, default_value = None)]
+    pub signature: Option<String>,
 }
